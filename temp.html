@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+
+  </body>
+  <script src="jsbn.js" charset="utf-8"></script>
+  <script src="jsbn2.js" charset="utf-8"></script>
+  <script src="base58.js"></script>
+
+  <script type="text/javascript">
+    temp = "";
+    var convert = function hexToStr(hex) {
+    	var str = '';
+      console.log("len : ",hex.length);
+    	for (var i = 0 ; i < hex.length; i += 2) {
+    	   var v = parseInt(hex.substr(i, 2), 16);
+    	   if (v) str += String.fromCharCode(v);
+
+    	}
+      console.log("string : ",str);
+
+      	params = [];
+    	res = "";
+    	for (var i=0; i<= str.length; i++){
+    		if(str.charCodeAt(i) > 31){
+    			res = res + str[i];
+    		}
+    		else{
+    			params.push(res);
+    			res = "";
+    		}
+    	}
+
+    	params.pop();
+
+      return params;
+    }
+    console.log(convert(temp));
+
+
+
+
+    function to_hex(s) {
+        var r = '';
+        for (var i = 0; i < s.length; i++) {
+            var v;
+            if (s[i] < 0)
+                s[i] += 256;
+            v = s[i].toString(16);
+            if (v.length == 1)
+                v = '0' + v;
+            r += v;
+        }
+        return r;
+    }
+    function from_hex(s) {
+        var r = [];
+
+        // add a leading 0 if there are an odd number of nybbles (thanks Elias C)
+        if (s.length % 2 != 0)
+            s = '0' + s;
+
+        for (var i = 0; i < s.length; i += 2)
+            r.push(parseInt(s.substr(i, 2), 16));
+        return r;
+    }
+    function hexformat() {
+        return $('#hexradio').prop('checked');
+    }
+
+    var hexalphabet = '0123456789abcdefABCDEF';
+    function strip_invalid(id, alphabet) {
+        var s = $(id).val();
+        var r = '';
+        for (var i = 0; i < s.length; i++) {
+            if (alphabet.indexOf(s.charAt(i)) != -1)
+                r += s.charAt(i);
+        }
+        $(id).val(r);
+    }
+
+    $('#encode').click(function() {
+        var plain;
+        if (hexformat()) {
+            strip_invalid('#plain', hexalphabet);
+            plain = from_hex($('#plain').val());
+        } else {
+            plain = base58.byte_array($('#plain').val());
+        }
+        $('#base58').val(base58.encode(plain));
+    });
+    $('#decode').click(function() {
+        strip_invalid('#base58', base58.alphabet);
+        plain = base58.decode($('#base58').val());
+        if (hexformat()) {
+            plain = to_hex(plain);
+        } else {
+            plain = base58.string(plain);
+        }
+        $('#plain').val(plain);
+    });
+
+  </script>
+</html>

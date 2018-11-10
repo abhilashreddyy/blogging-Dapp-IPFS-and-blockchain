@@ -1,0 +1,36 @@
+<%include ./partials/header %>
+
+    <div class = "ui main text container segment">
+          <div class = "ui huge header ">New Blog </div>
+     <form class="ui form" action = "/blogs" onsubmit = "return false" method = "POST">
+          <div class="field">
+
+          <label>Title</label>
+                <input id = "title" type = "text" name="blog[title]" placeholder = "title">
+          </div>
+
+          <div class="field">
+
+          <label>Image</label>
+                <input id = "image" type = "text" name="blog[image]" placeholder = "image">
+          </div>
+
+          <div class="field">
+
+          <label>Blog Content</label>
+               <textarea id="content" name = "blog[body]"></textarea>
+          </div>
+
+
+
+
+
+
+          <input class="ui violet big basic button" id = "submit" type = "submit" >
+
+
+    </div>
+
+  </body>
+  <script src="/js/newblog.js" charset="utf-8"></script>
+</html>

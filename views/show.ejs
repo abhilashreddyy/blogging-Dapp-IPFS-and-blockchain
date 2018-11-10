@@ -1,0 +1,62 @@
+<%include ./partials/header %>
+
+<div class = "ui main text container segment">
+      <div class = "ui huge header " id = "title"> </div>
+      <div class = "ui top attached ">
+        <div class = "item">
+            <img class="ui centered rounded image"  id = "image">
+            <div class = "content">
+             <span></span>
+             </div>
+             <div class = "description">
+               <p id = "body"></p>
+
+               </div>
+               <a id = "edit" class="ui orange basic button" href="">Edit</a>
+
+               <form id = "delete" action="" method = "POST">
+               <button class="ui red basic button">Delete</button>
+               </form>
+               </div>
+               </div>
+
+
+</div>
+<script type="text/javascript">
+  const node = new Ipfs();
+  hash = "<%=blog.hash%>";
+  console.log(node.files);
+
+
+
+
+  function get_hash_data(hash){
+    node.on('ready', () => {
+      node.files.get(hash, function (err, files) {
+        files.forEach((file) => {
+          console.log(file.content.toString('utf8'))
+          cont = JSON.parse(file.content);
+          cont['_id'] = hash;
+          show_content(cont);
+        })
+      })
+    })
+  }
+
+  function show_content(blog){
+    $(document).ready(function(){
+      $("img").attr("src", blog.image);
+      $("#title").text(blog.title);
+      $("span").text(Date(blog.created));
+      $("#body").text(blog.content);
+      $("#edit").attr("href", `/blogs/${blog._id}/edit`)
+      $("#delete").attr("action", `/blogs/${blog._id}?_method=DELETE`)
+    });
+
+  }
+  get_hash_data(hash)
+
+
+</script>
+
+<%include ./partials/footer %>
